@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
       - name: nodejs
-        image: vijayendraacr.azurecr.io/nodejs:latest
+        image: your_acr.azurecr.io/nodejs:latest
         ports:
         - containerPort: 3000
