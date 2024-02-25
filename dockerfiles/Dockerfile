@@ -8,7 +8,7 @@ RUN apt install -y git
 RUN apt install -y nginx
 # Set the working directory in the container
 WORKDIR /app
-RUN git clone https://github.com/vijaypranesh/notesapp.git
+RUN git clone https://github.com/vijaypranesh/3tierApp-AKS.git
 RUN cp -rp /app/notesapp/nginxconf/myapp.conf /etc/nginx/sites-available
 RUN ln -s /etc/nginx/sites-available/myapp.conf /etc/nginx/sites-enabled/myapp.conf
 RUN rm -rf /etc/nginx/sites-enabled/default
