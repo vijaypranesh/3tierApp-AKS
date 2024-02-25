@@ -1,0 +1,36 @@
+FROM ubuntu
+
+MAINTAINER Vijayendra
+
+RUN apt-get update
+RUN apt-get install -y curl
+RUN apt install -y git
+
+#Installing Latest nodejs
+RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash -
+RUN apt update
+RUN apt-get install -y nodejs
+
+# Print Node.js and npm versions
+RUN node -v
+RUN npm -v
+
+#Install Git
+RUN apt-get update && apt-get install -y git
+
+# Set the working directory in the container
+WORKDIR /app
+
+#Install dependencies
+#RUN apt-get install -y npm
+RUN npm install -y express body-parser mongoose passport passport-local bcryptjs jsonwebtoken
+RUN npm install -y bcrypt
+RUN npm install -y cors
+RUN npm install -y body-parser
+RUN npm install -y -g pm2;
+RUN git clone https://github.com/vijaypranesh/notesapp.git
+RUN cd /app/notesapp
+
+EXPOSE 3000
+
+CMD ["node", "/app/notesapp/server.js"]

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes App</title>
+</head>
+<body>
+    <h1>Notes App</h1>
+    <form id="noteForm">
+        <input type="text" id="title" placeholder="Title" required><br>
+        <textarea id="content" placeholder="Content" required></textarea><br>
+        <button type="submit">Add Note</button>
+    </form>
+    <div id="notesList"></div>
+
+    <script>
+        async function addNote() {
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const noteData = { title, content };
+            try {
+                const response = await fetch('/api/notes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(noteData)
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to add note');
+                }
+                document.getElementById('title').value = '';
+                document.getElementById('content').value = '';
+                fetchNotes();
+            } catch (err) {
+                console.error(err);
+                // Handle error (e.g., show error message to user)
+            }
+        }
+
+        async function fetchNotes() {
+            try {
+                const response = await fetch(`/api/notes`);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch notes');
+                }
+                const data = await response.json();
+                const notesList = document.getElementById('notesList');
+                notesList.innerHTML = '';
+                data.forEach(note => {
+                    const noteElement = document.createElement('div');
+                    noteElement.classList.add('note');
+                    noteElement.innerHTML = `
+                        <h3>${note.title}</h3>
+                        <p>${note.content}</p>
+                        <p>Created At: ${new Date(note.createdAt).toLocaleString()}</p>
+                    `;
+                    notesList.appendChild(noteElement);
+                });
+            } catch (err) {
+                console.error(err);
+                // Handle error (e.g., show error message to user)
+            }
+        }
+
+        document.getElementById('noteForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            addNote();
+        });
+
+        // Fetch notes on page load
+        window.addEventListener('DOMContentLoaded', fetchNotes);
+    </script>
+</body>
+</html>
+

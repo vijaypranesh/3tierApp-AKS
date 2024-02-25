@@ -1,0 +1,24 @@
+# mongodb-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+      - name: mongodb
+        image: vijayendraacr.azurecr.io/mongodb:latest
+        ports:
+        - containerPort: 27017
+      imagePullSecrets:
+      - name: acr-secret    
+
